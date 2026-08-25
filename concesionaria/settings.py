@@ -130,7 +130,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Datos de contacto del negocio, usados en todo el sitio vía context processor
 WHATSAPP_NUMERO = config('WHATSAPP_NUMERO', default='5492216379409')
-INSTAGRAM_USUARIO = config('INSTAGRAM_USUARIO', default='gys_automotores')
+INSTAGRAM_USUARIO = config('INSTAGRAM_USUARIO', default='gys__automotores')
 
 
 # Seguridad HTTPS — Railway ya termina el SSL antes de llegar a Django,
