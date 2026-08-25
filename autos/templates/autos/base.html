@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es-ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Concesionaria{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'autos/style.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <a href="{% url 'catalogo' %}" class="logo">Tu Concesionaria</a>
+        <a href="https://instagram.com/{{ instagram_usuario }}" target="_blank" class="link-instagram">Instagram</a>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; {% now "Y" %} Tu Concesionaria — Compra y venta de autos usados y 0km</p>
+    </footer>
+</body>
+</html>

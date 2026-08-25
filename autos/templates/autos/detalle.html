@@ -1,0 +1,53 @@
+{% extends 'autos/base.html' %}
+
+{% block title %}{{ auto.marca }} {{ auto.modelo }}{% endblock %}
+
+{% block content %}
+<a href="{% url 'catalogo' %}" class="volver">&larr; Volver al catálogo</a>
+
+<div class="detalle">
+    <div class="detalle-fotos">
+        {% if auto.fotos.all %}
+            <img id="foto-principal" src="{{ auto.fotos.first.imagen.url }}" alt="{{ auto }}">
+            {% if auto.fotos.count > 1 %}
+            <div class="miniaturas">
+                {% for foto in auto.fotos.all %}
+                <img src="{{ foto.imagen.url }}" class="miniatura" onclick="document.getElementById('foto-principal').src=this.src">
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% else %}
+            <div class="sin-foto grande">Sin foto</div>
+        {% endif %}
+    </div>
+
+    <div class="detalle-info">
+        <span class="badge">{{ auto.get_condicion_display }}</span>
+        <h1>{{ auto.marca }} {{ auto.modelo }}</h1>
+        <p class="precio-grande">{{ auto.moneda }} {{ auto.precio|floatformat:0 }}</p>
+
+        <ul class="specs">
+            <li><strong>Año:</strong> {{ auto.anio }}</li>
+            {% if auto.kilometraje %}<li><strong>Kilometraje:</strong> {{ auto.kilometraje }} km</li>{% endif %}
+            {% if auto.combustible %}<li><strong>Combustible:</strong> {{ auto.combustible }}</li>{% endif %}
+            {% if auto.transmision %}<li><strong>Transmisión:</strong> {{ auto.transmision }}</li>{% endif %}
+            {% if auto.color %}<li><strong>Color:</strong> {{ auto.color }}</li>{% endif %}
+        </ul>
+
+        {% if auto.descripcion %}
+        <p class="descripcion">{{ auto.descripcion }}</p>
+        {% endif %}
+
+        <div class="contacto">
+            <a href="https://wa.me/{{ whatsapp_numero }}?text=Hola!%20Me%20interesa%20el%20{{ auto.marca }}%20{{ auto.modelo }}%20{{ auto.anio }}"
+               target="_blank" class="btn btn-whatsapp">
+                Consultar por WhatsApp
+            </a>
+            <a href="https://instagram.com/{{ instagram_usuario }}"
+               target="_blank" class="btn btn-instagram">
+                Seguinos en Instagram
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'autos/base.html' %}
+
+{% block title %}Catálogo{% endblock %}
+
+{% block content %}
+<h1>Nuestro catálogo</h1>
+
+<form method="get" class="filtros">
+    <select name="marca">
+        <option value="">Todas las marcas</option>
+        {% for m in marcas_disponibles %}
+        <option value="{{ m }}" {% if filtros.marca == m %}selected{% endif %}>{{ m }}</option>
+        {% endfor %}
+    </select>
+
+    <input type="text" name="modelo" placeholder="Modelo" value="{{ filtros.modelo }}">
+
+    <select name="anio">
+        <option value="">Todos los años</option>
+        {% for a in anios_disponibles %}
+        <option value="{{ a }}" {% if filtros.anio == a|stringformat:"s" %}selected{% endif %}>{{ a }}</option>
+        {% endfor %}
+    </select>
+
+    <input type="number" name="precio_min" placeholder="Precio mín." value="{{ filtros.precio_min }}">
+    <input type="number" name="precio_max" placeholder="Precio máx." value="{{ filtros.precio_max }}">
+
+    <button type="submit" class="btn-filtrar">Filtrar</button>
+    {% if filtros.marca or filtros.modelo or filtros.anio or filtros.precio_min or filtros.precio_max %}
+        <a href="{% url 'catalogo' %}" class="limpiar-filtros">Limpiar</a>
+    {% endif %}
+</form>
+
+{% if autos %}
+<div class="grilla">
+    {% for auto in autos %}
+    <a href="{% url 'detalle_auto' auto.id %}" class="tarjeta">
+        {% if auto.foto_principal %}
+            <img src="{{ auto.foto_principal.imagen.url }}" alt="{{ auto }}">
+        {% else %}
+            <div class="sin-foto">Sin foto</div>
+        {% endif %}
+        <div class="tarjeta-info">
+            <span class="badge">{{ auto.get_condicion_display }}</span>
+            <h2>{{ auto.marca }} {{ auto.modelo }}</h2>
+            <p class="anio">{{ auto.anio }}{% if auto.kilometraje %} · {{ auto.kilometraje }} km{% endif %}</p>
+            <p class="precio">{{ auto.moneda }} {{ auto.precio|floatformat:0 }}</p>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% else %}
+<p class="vacio">Todavía no hay autos publicados.</p>
+{% endif %}
+{% endblock %}
