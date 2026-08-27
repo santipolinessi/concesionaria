@@ -1,9 +1,18 @@
 {% extends 'autos/base.html' %}
+{% load l10n %}
 
-{% block title %}Catálogo{% endblock %}
+{% block title %}Catálogo — GYS Automotores{% endblock %}
 
 {% block content %}
-<h1>Nuestro catálogo</h1>
+{% load static %}
+<section class="hero">
+    <div class="hero-texto">
+        <p class="hero-eyebrow">Usados y 0km</p>
+        <h1>Encontrá tu próximo auto</h1>
+        <p class="hero-sub">Catálogo actualizado, consultá directo por WhatsApp o Instagram.</p>
+    </div>
+    <img src="{% static 'autos/img/mascota.png' %}" alt="Mascota GYS Automotores" class="hero-mascota">
+</section>
 
 <form method="get" class="filtros">
     <select name="marca">
@@ -18,16 +27,24 @@
     <select name="anio">
         <option value="">Todos los años</option>
         {% for a in anios_disponibles %}
-        <option value="{{ a }}" {% if filtros.anio == a|stringformat:"s" %}selected{% endif %}>{{ a }}</option>
+        <option value="{{ a|unlocalize }}" {% if filtros.anio == a|stringformat:"s" %}selected{% endif %}>{{ a|unlocalize }}</option>
         {% endfor %}
     </select>
+    <input type="number" name="precio_min" placeholder="Precio min" value="{{ filtros.precio_min }}">
+    <input type="number" name="precio_max" placeholder="Precio max" value="{{ filtros.precio_max }}">
 
-    <input type="number" name="precio_min" placeholder="Precio mín." value="{{ filtros.precio_min }}">
-    <input type="number" name="precio_max" placeholder="Precio máx." value="{{ filtros.precio_max }}">
+    <input type="number" name="km_min" placeholder="Km min" value="{{ filtros.km_min }}">
+    <input type="number" name="km_max" placeholder="Km max" value="{{ filtros.km_max }}">
+
+    <select name="orden">
+        <option value="" {% if not filtros.orden %}selected{% endif %}>Más recientes</option>
+        <option value="precio_asc" {% if filtros.orden == 'precio_asc' %}selected{% endif %}>Precio: menor a mayor</option>
+        <option value="precio_desc" {% if filtros.orden == 'precio_desc' %}selected{% endif %}>Precio: mayor a menor</option>
+    </select>
 
     <button type="submit" class="btn-filtrar">Filtrar</button>
-    {% if filtros.marca or filtros.modelo or filtros.anio or filtros.precio_min or filtros.precio_max %}
-        <a href="{% url 'catalogo' %}" class="limpiar-filtros">Limpiar</a>
+    {% if filtros.marca or filtros.modelo or filtros.anio or filtros.precio_min or filtros.precio_max or filtros.km_min or filtros.km_max %}
+    <a href="{% url 'catalogo' %}" class="limpiar-filtros">Limpiar</a>
     {% endif %}
 </form>
 
@@ -35,21 +52,28 @@
 <div class="grilla">
     {% for auto in autos %}
     <a href="{% url 'detalle_auto' auto.id %}" class="tarjeta">
-        {% if auto.foto_principal %}
-            <img src="{{ auto.foto_principal.imagen.url }}" alt="{{ auto }}">
-        {% else %}
-            <div class="sin-foto">Sin foto</div>
-        {% endif %}
+        <div class="tarjeta-foto">
+            {% if auto.foto_principal %}
+                <img src="{{ auto.foto_principal.imagen.url }}" alt="{{ auto }}">
+            {% else %}
+                <div class="sin-foto">Sin foto</div>
+            {% endif %}
+            <span class="patente patente-chica">
+                <span class="patente-texto">{% if auto.condicion == '0km' %}0KM{% else %}{{ auto.anio|unlocalize }}{% endif %}</span>
+            </span>
+        </div>
         <div class="tarjeta-info">
-            <span class="badge">{{ auto.get_condicion_display }}</span>
             <h2>{{ auto.marca }} {{ auto.modelo }}</h2>
-            <p class="anio">{{ auto.anio }}{% if auto.kilometraje %} · {{ auto.kilometraje }} km{% endif %}</p>
+            <p class="anio">{{ auto.anio|unlocalize }}{% if auto.kilometraje %} · {{ auto.kilometraje }} km{% endif %}</p>
             <p class="precio">{{ auto.moneda }} {{ auto.precio|floatformat:0 }}</p>
         </div>
     </a>
     {% endfor %}
 </div>
 {% else %}
-<p class="vacio">Todavía no hay autos publicados.</p>
+<div class="vacio">
+    <p>Todavía no hay autos publicados.</p>
+    <p class="vacio-sub">Entrá al panel de administración y cargá el primero.</p>
+</div>
 {% endif %}
 {% endblock %}

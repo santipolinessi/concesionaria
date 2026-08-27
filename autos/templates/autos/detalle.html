@@ -1,6 +1,15 @@
 {% extends 'autos/base.html' %}
+{% load l10n %}
+{% load static %}
+{% load autos_extras %}
 
-{% block title %}{{ auto.marca }} {{ auto.modelo }}{% endblock %}
+{% block title %}{{ auto.marca }} {{ auto.modelo }} {{ auto.anio|unlocalize }} — GYS Automotores{% endblock %}
+
+{% block meta_description %}{{ auto.marca }} {{ auto.modelo }} {{ auto.anio|unlocalize }}{% if auto.kilometraje %}, {{ auto.kilometraje }} km{% endif %} — {{ auto.moneda }} {{ auto.precio|floatformat:0 }}. Consultá por WhatsApp en GYS Automotores.{% endblock %}
+
+{% block og_title %}{{ auto.marca }} {{ auto.modelo }} {{ auto.anio|unlocalize }} — {{ auto.moneda }} {{ auto.precio|floatformat:0 }}{% endblock %}
+{% block og_description %}{% if auto.kilometraje %}{{ auto.kilometraje }} km · {% endif %}{{ auto.get_condicion_display }}. Consultá por WhatsApp en GYS Automotores.{% endblock %}
+{% block og_image %}{% if auto.foto_principal %}{% url_absoluta auto.foto_principal.imagen.url %}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'autos/img/mascota.png' %}{% endif %}{% endblock %}
 
 {% block content %}
 <a href="{% url 'catalogo' %}" class="volver">&larr; Volver al catálogo</a>
@@ -8,11 +17,17 @@
 <div class="detalle">
     <div class="detalle-fotos">
         {% if auto.fotos.all %}
-            <img id="foto-principal" src="{{ auto.fotos.first.imagen.url }}" alt="{{ auto }}">
+            <div class="foto-principal-wrap">
+                <img id="foto-principal" src="{{ auto.fotos.first.imagen.url }}" alt="{{ auto }}">
+                {% if auto.fotos.count > 1 %}
+                <button type="button" class="foto-flecha foto-flecha-izq" onclick="cambiarFoto(-1)" aria-label="Foto anterior">&#8249;</button>
+                <button type="button" class="foto-flecha foto-flecha-der" onclick="cambiarFoto(1)" aria-label="Foto siguiente">&#8250;</button>
+                {% endif %}
+            </div>
             {% if auto.fotos.count > 1 %}
             <div class="miniaturas">
                 {% for foto in auto.fotos.all %}
-                <img src="{{ foto.imagen.url }}" class="miniatura" onclick="document.getElementById('foto-principal').src=this.src">
+                <img src="{{ foto.imagen.url }}" class="miniatura {% if forloop.first %}miniatura-activa{% endif %}" onclick="irAFoto({{ forloop.counter0 }})">
                 {% endfor %}
             </div>
             {% endif %}
@@ -22,16 +37,19 @@
     </div>
 
     <div class="detalle-info">
-        <span class="badge">{{ auto.get_condicion_display }}</span>
+        <span class="patente">
+            <span class="patente-texto">{% if auto.condicion == '0km' %}0KM{% else %}{{ auto.anio|unlocalize }}{% endif %}</span>
+        </span>
+
         <h1>{{ auto.marca }} {{ auto.modelo }}</h1>
         <p class="precio-grande">{{ auto.moneda }} {{ auto.precio|floatformat:0 }}</p>
 
         <ul class="specs">
-            <li><strong>Año:</strong> {{ auto.anio }}</li>
-            {% if auto.kilometraje %}<li><strong>Kilometraje:</strong> {{ auto.kilometraje }} km</li>{% endif %}
-            {% if auto.combustible %}<li><strong>Combustible:</strong> {{ auto.combustible }}</li>{% endif %}
-            {% if auto.transmision %}<li><strong>Transmisión:</strong> {{ auto.transmision }}</li>{% endif %}
-            {% if auto.color %}<li><strong>Color:</strong> {{ auto.color }}</li>{% endif %}
+            <li><span>Año</span><strong>{{ auto.anio|unlocalize }}</strong></li>
+            {% if auto.kilometraje %}<li><span>Kilometraje</span><strong>{{ auto.kilometraje }} km</strong></li>{% endif %}
+            {% if auto.combustible %}<li><span>Combustible</span><strong>{{ auto.combustible }}</strong></li>{% endif %}
+            {% if auto.transmision %}<li><span>Transmisión</span><strong>{{ auto.transmision }}</strong></li>{% endif %}
+            {% if auto.color %}<li><span>Color</span><strong>{{ auto.color }}</strong></li>{% endif %}
         </ul>
 
         {% if auto.descripcion %}
@@ -39,15 +57,44 @@
         {% endif %}
 
         <div class="contacto">
-            <a href="https://wa.me/{{ whatsapp_numero }}?text=Hola!%20Me%20interesa%20el%20{{ auto.marca }}%20{{ auto.modelo }}%20{{ auto.anio }}"
+            <a href="https://wa.me/{{ whatsapp_numero }}?text=Hola!%20Me%20interesa%20el%20{{ auto.marca }}%20{{ auto.modelo }}%20{{ auto.anio|unlocalize }}"
                target="_blank" class="btn btn-whatsapp">
                 Consultar por WhatsApp
             </a>
-            <a href="https://instagram.com/{{ instagram_usuario }}"
-               target="_blank" class="btn btn-instagram">
+            <a href="https://instagram.com/{{ instagram_usuario }}" target="_blank" class="btn btn-instagram">
                 Seguinos en Instagram
+            </a>
+            <a href="https://wa.me/?text=Mir%C3%A1%20este%20{{ auto.marca }}%20{{ auto.modelo }}%20{{ auto.anio|unlocalize }}%20en%20GYS%20Automotores%3A%20{{ request.build_absolute_uri|urlencode }}"
+               target="_blank" class="btn btn-compartir">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
+                Compartir este auto
             </a>
         </div>
     </div>
 </div>
+
+{% if auto.fotos.count > 1 %}
+<script>
+    const fotosAuto = [
+        {% for foto in auto.fotos.all %}"{{ foto.imagen.url }}",{% endfor %}
+    ];
+    let fotoActual = 0;
+
+    function mostrarFoto(indice) {
+        fotoActual = (indice + fotosAuto.length) % fotosAuto.length;
+        document.getElementById('foto-principal').src = fotosAuto[fotoActual];
+        document.querySelectorAll('.miniatura').forEach((img, i) => {
+            img.classList.toggle('miniatura-activa', i === fotoActual);
+        });
+    }
+
+    function cambiarFoto(direccion) {
+        mostrarFoto(fotoActual + direccion);
+    }
+
+    function irAFoto(indice) {
+        mostrarFoto(indice);
+    }
+</script>
+{% endif %}
 {% endblock %}

@@ -98,6 +98,7 @@ LANGUAGE_CODE = 'es-ar'
 TIME_ZONE = 'America/Argentina/Buenos_Aires'
 USE_I18N = True
 USE_TZ = True
+USE_THOUSAND_SEPARATOR = True
 
 
 # Static files (CSS) — servidos por whitenoise, sin depender de un servidor aparte
@@ -122,6 +123,7 @@ if USE_CLOUDINARY:
         'API_SECRET': config('CLOUDINARY_API_SECRET', default=''),
     }
 else:
+    STORAGES['default'] = {'BACKEND': 'django.core.files.storage.FileSystemStorage'}
     MEDIA_URL = '/media/'
     MEDIA_ROOT = BASE_DIR / 'media'
 
