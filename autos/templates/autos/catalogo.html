@@ -15,37 +15,64 @@
 </section>
 
 <form method="get" class="filtros">
-    <select name="marca">
-        <option value="">Todas las marcas</option>
-        {% for m in marcas_disponibles %}
-        <option value="{{ m }}" {% if filtros.marca == m %}selected{% endif %}>{{ m }}</option>
-        {% endfor %}
-    </select>
+    <div class="filtro-campo">
+        <label class="filtro-label">Marca</label>
+        <select name="marca">
+            <option value="">Todas</option>
+            {% for m in marcas_disponibles %}
+            <option value="{{ m }}" {% if filtros.marca == m %}selected{% endif %}>{{ m }}</option>
+            {% endfor %}
+        </select>
+    </div>
 
-    <input type="text" name="modelo" placeholder="Modelo" value="{{ filtros.modelo }}">
+    <div class="filtro-campo">
+        <label class="filtro-label">Modelo</label>
+        <input type="text" name="modelo" placeholder="Ej: Corolla" value="{{ filtros.modelo }}">
+    </div>
 
-    <select name="anio">
-        <option value="">Todos los años</option>
-        {% for a in anios_disponibles %}
-        <option value="{{ a|unlocalize }}" {% if filtros.anio == a|stringformat:"s" %}selected{% endif %}>{{ a|unlocalize }}</option>
-        {% endfor %}
-    </select>
-    <input type="number" name="precio_min" placeholder="Precio min" value="{{ filtros.precio_min }}">
-    <input type="number" name="precio_max" placeholder="Precio max" value="{{ filtros.precio_max }}">
+    <div class="filtro-campo">
+        <label class="filtro-label">Año</label>
+        <select name="anio">
+            <option value="">Todos</option>
+            {% for a in anios_disponibles %}
+            <option value="{{ a|unlocalize }}" {% if filtros.anio == a|stringformat:"s" %}selected{% endif %}>{{ a|unlocalize }}</option>
+            {% endfor %}
+        </select>
+    </div>
 
-    <input type="number" name="km_min" placeholder="Km min" value="{{ filtros.km_min }}">
-    <input type="number" name="km_max" placeholder="Km max" value="{{ filtros.km_max }}">
+    <div class="filtro-campo filtro-campo-rango">
+        <label class="filtro-label">Precio</label>
+        <div class="filtro-rango">
+            <input type="number" name="precio_min" placeholder="Mín" value="{{ filtros.precio_min }}">
+            <span class="filtro-rango-guion">—</span>
+            <input type="number" name="precio_max" placeholder="Máx" value="{{ filtros.precio_max }}">
+        </div>
+    </div>
 
-    <select name="orden">
-        <option value="" {% if not filtros.orden %}selected{% endif %}>Más recientes</option>
-        <option value="precio_asc" {% if filtros.orden == 'precio_asc' %}selected{% endif %}>Precio: menor a mayor</option>
-        <option value="precio_desc" {% if filtros.orden == 'precio_desc' %}selected{% endif %}>Precio: mayor a menor</option>
-    </select>
+    <div class="filtro-campo filtro-campo-rango">
+        <label class="filtro-label">Kilómetros</label>
+        <div class="filtro-rango">
+            <input type="number" name="km_min" placeholder="Mín" value="{{ filtros.km_min }}">
+            <span class="filtro-rango-guion">—</span>
+            <input type="number" name="km_max" placeholder="Máx" value="{{ filtros.km_max }}">
+        </div>
+    </div>
 
-    <button type="submit" class="btn-filtrar">Filtrar</button>
-    {% if filtros.marca or filtros.modelo or filtros.anio or filtros.precio_min or filtros.precio_max or filtros.km_min or filtros.km_max %}
-    <a href="{% url 'catalogo' %}" class="limpiar-filtros">Limpiar</a>
-    {% endif %}
+    <div class="filtro-campo">
+        <label class="filtro-label">Ordenar por</label>
+        <select name="orden">
+            <option value="" {% if not filtros.orden %}selected{% endif %}>Más recientes</option>
+            <option value="precio_asc" {% if filtros.orden == 'precio_asc' %}selected{% endif %}>Precio: menor a mayor</option>
+            <option value="precio_desc" {% if filtros.orden == 'precio_desc' %}selected{% endif %}>Precio: mayor a menor</option>
+        </select>
+    </div>
+
+    <div class="filtro-acciones">
+        <button type="submit" class="btn-filtrar">Filtrar</button>
+        {% if filtros.marca or filtros.modelo or filtros.anio or filtros.precio_min or filtros.precio_max or filtros.km_min or filtros.km_max %}
+        <a href="{% url 'catalogo' %}" class="limpiar-filtros">Limpiar</a>
+        {% endif %}
+    </div>
 </form>
 
 {% if autos %}

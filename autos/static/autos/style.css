@@ -30,18 +30,29 @@ a { color: inherit; }
 .site-header {
     background: var(--azul-profundo);
     padding: 0.6rem 2rem;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
     position: sticky;
     top: 0;
     z-index: 10;
 }
 
+.header-ubicacion {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--azul-cielo);
+    font-size: 0.85rem;
+    font-weight: 600;
+    justify-self: start;
+}
+
 .marca {
     display: flex;
     align-items: center;
     text-decoration: none;
+    justify-self: center;
 }
 
 .marca-placa {
@@ -68,6 +79,7 @@ a { color: inherit; }
     font-size: 0.95rem;
     font-weight: 700;
     letter-spacing: 0.01em;
+    justify-self: end;
 }
 
 .link-instagram:hover { color: var(--azul-cielo); }
@@ -141,34 +153,95 @@ main {
 
 /* Filtros */
 .filtros {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1.1rem 1rem;
+    align-items: end;
     margin-bottom: 2rem;
-    padding: 1rem;
+    padding: 1.4rem 1.5rem;
     background: var(--blanco);
-    border-radius: 12px;
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(11, 46, 79, 0.08);
     border: 1px solid var(--borde);
-    align-items: center;
+}
+
+.filtro-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+}
+
+.filtro-label {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--azul-primario);
 }
 
 .filtros select,
 .filtros input {
-    padding: 0.6rem 0.75rem;
-    border: 1px solid var(--borde);
-    border-radius: 6px;
+    padding: 0.6rem 0.7rem;
+    border: 1.5px solid var(--borde);
+    border-radius: 8px;
     font-family: var(--font-body);
     font-size: 0.88rem;
     background: var(--azul-hielo);
     color: var(--texto);
+    width: 100%;
+    min-width: 0;
+    transition: border-color 0.15s ease;
 }
 
-.filtros input[type="number"] { width: 115px; }
+.filtros select:focus,
+.filtros input:focus {
+    outline: none;
+    border-color: var(--azul-primario);
+}
+
+.filtro-campo-rango {
+    grid-column: span 2;
+}
+
+.filtro-rango {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1.5px solid var(--borde);
+    border-radius: 8px;
+    background: var(--azul-hielo);
+    padding: 0 0.5rem;
+}
+
+.filtro-rango input {
+    border: none;
+    background: transparent;
+    padding: 0.6rem 0.2rem;
+    text-align: center;
+}
+
+.filtro-rango input:focus { outline: none; }
+
+.filtro-rango-guion {
+    color: var(--texto-suave);
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+
+.filtro-acciones {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    grid-column: 1 / -1;
+}
 
 .btn-filtrar {
-    padding: 0.6rem 1.3rem;
+    padding: 0.65rem 1.6rem;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     background: var(--azul-primario);
     color: var(--blanco);
     font-weight: 700;
@@ -180,9 +253,17 @@ main {
 .btn-filtrar:hover { background: var(--azul-profundo); }
 
 .limpiar-filtros {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     color: var(--texto-suave);
     text-decoration: underline;
+    white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+    .filtros { grid-template-columns: repeat(2, 1fr); padding: 1.2rem; }
+    .filtro-campo-rango { grid-column: span 2; }
+    .filtro-acciones { justify-content: space-between; }
+    .btn-filtrar { flex: 1; }
 }
 
 /* Grilla / tarjetas */
@@ -351,7 +432,13 @@ main {
 @media (max-width: 800px) {
     .detalle { grid-template-columns: 1fr; }
     .marca-logo { height: 60px; }
-    .site-header { padding: 0.5rem 1.2rem; }
+    .site-header { padding: 0.5rem 1rem; }
+    .header-ubicacion span { display: none; }
+    .link-instagram span { display: none; }
+}
+
+@media (max-width: 480px) {
+    .header-ubicacion { display: none; }
 }
 
 #foto-principal {
@@ -510,6 +597,13 @@ main {
     color: var(--blanco);
     background: var(--azul-profundo);
     font-size: 0.85rem;
+}
+
+.site-footer p { margin: 0.25rem 0; }
+
+.site-footer-copy {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.78rem;
 }
 
 /* WhatsApp flotante */
