@@ -46,10 +46,18 @@ def catalogo(request):
     marcas_disponibles = Auto.objects.filter(activo=True).values_list('marca', flat=True).distinct().order_by('marca')
     anios_disponibles = Auto.objects.filter(activo=True).values_list('anio', flat=True).distinct().order_by('-anio')
 
+    total_resultados = autos.count()
+    hay_filtros_activos = any([marca, modelo, anio, precio_min, precio_max, km_min, km_max])
+    # Para distinguir "no hay resultados con estos filtros" de "no hay ningún auto cargado"
+    hay_autos_en_total = Auto.objects.filter(activo=True).exists()
+
     contexto = {
         'autos': autos,
         'marcas_disponibles': marcas_disponibles,
         'anios_disponibles': anios_disponibles,
+        'total_resultados': total_resultados,
+        'hay_filtros_activos': hay_filtros_activos,
+        'hay_autos_en_total': hay_autos_en_total,
         'filtros': {
             'marca': marca, 'modelo': modelo, 'anio': anio,
             'precio_min': precio_min, 'precio_max': precio_max,

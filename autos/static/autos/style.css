@@ -343,6 +343,13 @@ main {
 
 .vacio p { margin: 0.3rem 0; }
 .vacio-sub { font-size: 0.9rem; }
+.vacio-sub a { color: var(--azul-primario); font-weight: 600; }
+
+.resultados-contador {
+    color: var(--texto-suave);
+    font-size: 0.88rem;
+    margin: 0 0 1rem;
+}
 
 /* Página 404 */
 .error-404 {

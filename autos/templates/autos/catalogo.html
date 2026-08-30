@@ -76,6 +76,7 @@
 </form>
 
 {% if autos %}
+<p class="resultados-contador">{{ total_resultados }} auto{{ total_resultados|pluralize }} encontrado{{ total_resultados|pluralize }}</p>
 <div class="grilla">
     {% for auto in autos %}
     <a href="{% url 'detalle_auto' auto.id %}" class="tarjeta">
@@ -96,6 +97,11 @@
         </div>
     </a>
     {% endfor %}
+</div>
+{% elif hay_autos_en_total %}
+<div class="vacio">
+    <p>No encontramos autos con esos filtros.</p>
+    <p class="vacio-sub"><a href="{% url 'catalogo' %}">Ver todo el catálogo</a></p>
 </div>
 {% else %}
 <div class="vacio">
