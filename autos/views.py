@@ -91,5 +91,6 @@ def robots_txt(request):
         "User-agent: *\n"
         "Allow: /\n"
         "Disallow: /admin/\n"
+        f"Sitemap: {request.scheme}://{request.get_host()}/sitemap.xml\n"
     )
     return HttpResponse(contenido, content_type='text/plain')
