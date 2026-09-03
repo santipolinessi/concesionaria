@@ -15,25 +15,26 @@
 </section>
 
 <section class="quienes-somos">
-    <p class="quienes-somos-texto">
-        GYS Automotores es un negocio familiar de la ciudad de La Plata, con más de 10 años dedicados a la compra y venta de autos, tanto usados como 0km, ahora también de la mano de la segunda generación. Mostramos cada auto tal cual es, sin sorpresas: nuestra prioridad es la transparencia.
-    </p>
-    <div class="quienes-somos-destacados">
-        <div class="destacado">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-            <span>+10 años en el rubro</span>
-        </div>
-        <div class="destacado">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            <span>Negocio familiar</span>
-        </div>
-        <div class="destacado">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-            <span>Financiación disponible</span>
-        </div>
-        <div class="destacado">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-            <span>Papeles siempre en regla</span>
+    <div class="quienes-somos-contenido">
+        <p class="quienes-somos-texto">
+            GYS Automotores es un negocio familiar de la ciudad de La Plata, con más de 10 años dedicados a la compra y venta de autos, tanto usados como 0km, ahora también de la mano de la segunda generación. Mostramos cada auto tal cual es, sin sorpresas: nuestra prioridad es la transparencia.
+        </p>
+        <div class="quienes-somos-destacados">
+            <div class="destacado">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                <span>+10 años en el rubro</span>
+            </div>
+            <div class="destacado">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <span>Negocio familiar</span>
+            </div>
+            <div class="destacado">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                <span>Financiación disponible</span>
+            </div>
+            <div class="destacado">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                <span>Papeles siempre en regla</span>
         </div>
     </div>
 </section>
@@ -113,6 +114,9 @@
             <span class="patente patente-chica">
                 <span class="patente-texto">{% if auto.condicion == '0km' %}0KM{% else %}{{ auto.anio|unlocalize }}{% endif %}</span>
             </span>
+            {% if auto.es_nuevo %}
+            <span class="badge-nuevo">Nuevo</span>
+            {% endif %}
         </div>
         <div class="tarjeta-info">
             <h2>{{ auto.marca }} {{ auto.modelo }}</h2>

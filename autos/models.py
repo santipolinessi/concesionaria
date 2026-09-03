@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+from datetime import timedelta
 
 
 class Auto(models.Model):
@@ -34,6 +36,11 @@ class Auto(models.Model):
     @property
     def foto_principal(self):
         return self.fotos.first()
+
+    @property
+    def es_nuevo(self):
+        """True si se publicó en los últimos 7 días, para mostrar el badge 'Nuevo'."""
+        return timezone.now() - self.fecha_publicacion <= timedelta(days=7)
 
 
 class FotoAuto(models.Model):
