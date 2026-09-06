@@ -554,6 +554,9 @@ main {
     display: flex;
     gap: 0.5rem;
     margin-top: 0.75rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
 }
 
 .miniatura {
@@ -564,6 +567,7 @@ main {
     cursor: pointer;
     border: 2px solid var(--borde);
     opacity: 0.75;
+    flex-shrink: 0;
 }
 
 .miniatura:hover { opacity: 1; border-color: var(--azul-cielo); }
