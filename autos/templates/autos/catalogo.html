@@ -109,7 +109,10 @@
             {% if auto.foto_principal %}
                 <img src="{{ auto.foto_principal.imagen.url }}" alt="{{ auto }}">
             {% else %}
-                <div class="sin-foto">Sin foto</div>
+                <div class="sin-foto">
+                    <img src="{% static 'autos/img/sin_foto.png' %}" alt="Foto próximamente">
+                    <span>Foto próximamente</span>
+                </div>
             {% endif %}
             <span class="patente patente-chica">
                 <span class="patente-texto">{% if auto.condicion == '0km' %}0KM{% else %}{{ auto.anio|unlocalize }}{% endif %}</span>

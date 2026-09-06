@@ -32,7 +32,10 @@
             </div>
             {% endif %}
         {% else %}
-            <div class="sin-foto grande">Sin foto</div>
+            <div class="sin-foto grande">
+                <img src="{% static 'autos/img/sin_foto.png' %}" alt="Foto próximamente">
+                <span>Foto próximamente</span>
+            </div>
         {% endif %}
     </div>
 

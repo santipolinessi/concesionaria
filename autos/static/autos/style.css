@@ -363,14 +363,33 @@ main {
     width: 100%;
     height: 180px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 0.4rem;
     background: var(--azul-hielo);
     color: var(--texto-suave);
-    font-size: 0.85rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    overflow: hidden;
+    padding: 0.5rem;
 }
 
-.sin-foto.grande { height: 380px; border-radius: 12px; }
+.tarjeta-foto .sin-foto img {
+    height: 70%;
+    width: auto;
+    max-width: 85%;
+    object-fit: contain;
+}
+
+.sin-foto.grande {
+    height: 380px;
+    border-radius: 12px;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+}
+
+.sin-foto.grande img { height: 75%; width: auto; max-width: 85%; object-fit: contain; }
 
 .tarjeta-info { padding: 1rem 1.1rem 1.2rem; }
 
