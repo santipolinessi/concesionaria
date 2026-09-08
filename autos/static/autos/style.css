@@ -533,6 +533,11 @@ main {
     gap: 2.5rem;
 }
 
+.detalle-fotos, 
+.detalle-info { 
+    min-width: 0; 
+}
+
 @media (max-width: 800px) {
     .detalle { grid-template-columns: 1fr; }
     .marca-logo { height: 60px; }
